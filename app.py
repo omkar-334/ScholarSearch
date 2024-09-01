@@ -167,6 +167,17 @@ async def pubmed(session: aiohttp.ClientSession, author: str) -> list[tuple]:
         return []
 
 
+async def inspire(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    url = f"https://inspirehep.net/api/literature?sort=mostrecent&size=50&page=1&q=a%3A{quote(author)}"
+    async with session.get(url) as response:
+        if response.status == 200:
+            response = await response.json()
+            links = [i["links"]["json"] for i in response["hits"]["hits"]]
+            abstract_tasks = [abstract(session, link, "inspire") for link in links]
+            return await asyncio.gather(*abstract_tasks)
+        return []
+
+
 async def abstract(session: aiohttp.ClientSession, url: str, website: Literal["pubmed", "arxiv", "inspire"]) -> str:
     """Extract abstract of the given publication.
     Also functions as a secondary event loop.
