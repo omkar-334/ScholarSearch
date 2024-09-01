@@ -100,6 +100,27 @@ async def ieee(session: aiohttp.ClientSession, author: str) -> list[tuple]:
         return None
 
 
+async def dblp(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    url = f"https://dblp.org/search/author/api?q={quote(author)}&format=json"
+    headers = {"User-Agent": random.choice(user_agents)}
+    async with session.get(url, headers=headers) as response:
+        if response.status == 200:
+            data = await response.json()
+            hits = data.get("result", {}).get("hits", {})
+            articles = []
+            for name in hits:
+                if valid_name(author, name):
+                    url = name.get("info", {}).get("url") + ".xml"
+                    soup = BeautifulSoup(requests.get(url).content, features="xml")
+                    for article in soup.find_all("article"):
+                        title = article.find("title").text
+                        authors = [author.text for author in article.find_all("author")]
+                        url = article.find("ee").text
+                        article_data = (title, authors, url)
+                        articles.append(article_data)
+        return articles
+
+
 async def abstract(session: aiohttp.ClientSession, url: str, website: Literal["pubmed", "arxiv", "inspire"]) -> str:
     """Extract abstract of the given publication.
     Also functions as a secondary event loop.
