@@ -148,6 +148,25 @@ async def scholar(session: aiohttp.ClientSession, author: str) -> list[tuple]:
         return None
 
 
+async def pubmed(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    url = f"https://pubmed.ncbi.nlm.nih.gov/?term=%28{quote(author)}%5BAuthor%5D&sort="
+    async with session.get(url) as response:
+        if response.status == 200:
+            response = await response.text()
+
+            soup = BeautifulSoup(response, "lxml")
+            baseurl = "https://pubmed.ncbi.nlm.nih.gov/"
+            articles = soup.find_all("article", {"class": "full-docsum"})
+            titles = [i.find("a", {"class": "docsum-title"}).text.strip() for i in articles]
+            pmids = [i.find("span", {"class": "citation-part"}).text.split()[-1] for i in articles]
+            authors = [i.find("span", {"class": "docsum-authors full-authors"}).text.split(",") for i in articles]
+            links = [baseurl + i for i in pmids]
+            abstract_tasks = [abstract(session, link, "pubmed") for link in links]
+            abstracts = await asyncio.gather(*abstract_tasks)
+            return list(zip(titles, links, abstracts, authors))
+        return []
+
+
 async def abstract(session: aiohttp.ClientSession, url: str, website: Literal["pubmed", "arxiv", "inspire"]) -> str:
     """Extract abstract of the given publication.
     Also functions as a secondary event loop.
