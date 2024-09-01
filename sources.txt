@@ -1,0 +1,38 @@
+# Active
+   - DBLP
+   - ArXiv
+   - INSPIRE-HEP
+   - Google Scholar
+   - PubMed
+
+# Ethernet needed
+   - IEEE Xplore
+   - Scopus
+
+# TBA - Priority
+   - ScienceDirect
+   - ACM Digital Library
+   - Semantic Scholar
+   - BioRxiv
+   - PubChem
+
+# TBA
+   - Web of Science
+   - IOPscience
+   - RSC (Royal Society of Chemistry)
+   - ACS Publications
+   - MathSciNet
+   - Zentralblatt MATH
+   - Project Euclid
+   - Social Science Research Network (SSRN)
+   - JSTOR
+   - RePEc
+   - ASME Digital Collection
+   - Environmental Research Letters
+   - PsycINFO
+   - APA PsycNet
+   - Project MUSE
+   - HeinOnline
+   - Westlaw
+   - LexisNexis
+   - Harvard Business Review
