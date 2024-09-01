@@ -193,6 +193,18 @@ async def biorxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
             return await asyncio.gather(*tasks)
 
 
+async def nature(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    url = f"https://www.nature.com/search?author={quote(author)}&order=relevance"
+    async with session.get(url) as response:
+        if response.status == 200:
+            response = await response.read()
+            soup = BeautifulSoup(response, "lxml")
+            baseurl = "https://www.nature.com"
+            links = [baseurl + i.get("href", None) for i in soup.find_all("a", {"class": "c-card__link u-link-inherit"})]
+            tasks = [worker(session, link, "nature") for link in links]
+            return await asyncio.gather(*tasks)
+
+
 async def worker(session: aiohttp.ClientSession, url: str, source: str) -> list[tuple]:
     """Worker for a secondary event loop.
 
