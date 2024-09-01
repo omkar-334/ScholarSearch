@@ -121,6 +121,22 @@ async def dblp(session: aiohttp.ClientSession, author: str) -> list[tuple]:
         return articles
 
 
+async def arxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    url = f"https://export.arxiv.org/api/query?search_query=au:{quote(author)}"
+    headers = {"User-Agent": random.choice(user_agents)}
+    async with session.get(url, headers=headers) as response:
+        if response.status == 200:
+            content = await response.read()
+            results = feedparser.parse(content)["entries"]
+            authors = [[author["name"] for author in i["authors"]] for i in results]
+            links = [i["link"] for i in results]
+            titles = [i["title"] for i in results]
+            abstract_tasks = [abstract(session, link, "arxiv") for link in links]
+            abstracts = await asyncio.gather(*abstract_tasks)
+            return list(zip(titles, links, abstracts, authors))
+        return None
+
+
 async def abstract(session: aiohttp.ClientSession, url: str, website: Literal["pubmed", "arxiv", "inspire"]) -> str:
     """Extract abstract of the given publication.
     Also functions as a secondary event loop.
