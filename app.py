@@ -181,6 +181,18 @@ async def acmdl(session: aiohttp.ClientSession, author: str) -> list[tuple]:
         return []
 
 
+async def biorxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    url = f"https://www.biorxiv.org/search/%20author1%3A{quote(author)}%20jcode%3Abiorxiv%20numresults%3A75%20sort%3Arelevance-rank%20format_result%3Astandard"
+    async with session.get(url) as response:
+        if response.status == 200:
+            response = await response.read()
+            soup = BeautifulSoup(response, "lxml")
+            baseurl = "https://www.biorxiv.org"
+            links = [baseurl + i.get("href", None) for i in soup.find_all("a", {"class": "highwire-cite-linked-title"})]
+            tasks = [worker(session, link, "biorxiv") for link in links]
+            return await asyncio.gather(*tasks)
+
+
 async def worker(session: aiohttp.ClientSession, url: str, source: str) -> list[tuple]:
     """Worker for a secondary event loop.
 
