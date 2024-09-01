@@ -160,6 +160,27 @@ async def inspire(session: aiohttp.ClientSession, author: str) -> list[tuple]:
         return []
 
 
+async def acmdl(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    url = f"https://dl.acm.org/action/doSearch?fillQuickSearch=false&target=advanced&expand=dl&field1=ContribAuthor&text1={quote(author)}"
+    async with session.get(url) as response:
+        if response.status == 200:
+            response = await response.read()
+            soup = BeautifulSoup(response, "lxml")
+            articles = soup.find_all("li", {"class": "search__item issue-item-container"})
+            source = ["acmdl"] * len(articles)
+            titles = [i.find("span", {"class": "hlFld-Title"}).text for i in articles]
+            years = [extract_year(i.find("div", {"class": "bookPubDate simple-tooltip__block--b"}).text) for i in articles]
+            authors = [[j.text for j in i.find_all("span", {"class": "hlFld-ContribAuthor"})] for i in articles]
+            baseurl = "https://dl.acm.org"
+            links = [baseurl + i.find("span", {"class": "hlFld-Title"}).find("a").get("href") for i in articles]
+            abstracts = [i.find("div", {"class": "issue-item__abstract truncate-text"}).text.strip() for i in articles]
+
+            # abstract_tasks = [abstract(session, link, "acmdl") for link in links]
+            # abstracts = await asyncio.gather(*abstract_tasks)
+            return list(zip(source, titles, years, authors, links, abstracts))
+        return []
+
+
 async def worker(session: aiohttp.ClientSession, url: str, source: str) -> list[tuple]:
     """Worker for a secondary event loop.
 
