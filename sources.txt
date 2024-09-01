@@ -4,19 +4,19 @@
    - INSPIRE-HEP
    - Google Scholar
    - PubMed
+   - ACM DL
+   - BioRxiv
 
-# Ethernet needed
+# Ethernet
    - IEEE Xplore
    - Scopus
 
 # TBA - Priority
    - ScienceDirect
-   - ACM Digital Library
    - Semantic Scholar
-   - BioRxiv
-   - PubChem
 
 # TBA
+   - PubChem
    - Web of Science
    - IOPscience
    - RSC (Royal Society of Chemistry)
