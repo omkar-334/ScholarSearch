@@ -137,6 +137,17 @@ async def arxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
         return None
 
 
+async def scholar(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    url = f"https://serpapi.com/search?engine=google_scholar&q=author:{quote(author)}&api_key={apidict['SERPAPI_KEY']}"
+    async with session.get(url) as response:
+        if response.status == 200:
+            response = await response.json()
+            print(response)
+            result = response["organic_results"]
+            return [(ig("title", "link")(i) + (None,) + ([author.get("name", None) for author in i["publication_info"].get("authors", [])],)) for i in result]
+        return None
+
+
 async def abstract(session: aiohttp.ClientSession, url: str, website: Literal["pubmed", "arxiv", "inspire"]) -> str:
     """Extract abstract of the given publication.
     Also functions as a secondary event loop.
