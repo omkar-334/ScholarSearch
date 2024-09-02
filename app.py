@@ -39,36 +39,44 @@ user_agents = [
 ]
 
 
-def valid_name(author: str, name: str) -> bool:
-    """Checks if the result author names match the queried author.
-
-    Args:
-        author (str): Queried author name
-        name (str): Name to be checked
-
-    Returns:
-        bool: Returns True if name is valid.
-    """
-    name.replace(".", "").replace(",", "")
-    names = [name]
-    splitname = name.split()
+def generate_variants(author: str) -> set[str]:
+    author = author.replace(".", "").replace(",", "").lower()
+    variants = {author}
+    splitname = author.split()
 
     if len(splitname) == 2:
         first, last = splitname
-        if len(first) != 1 and len(last) != 1:
-            names.append(f"{first[0]} {last}")
-            names.append(f"{first} {last[0]}")
+        if len(first) > 1 and len(last) > 1:
+            variants.add(f"{first[0]} {last}")
+            variants.add(f"{first} {last[0]}")
     elif len(splitname) == 3:
         first, middle, last = splitname
-        names.append(f"{first[0]} {middle} {last}")
-        names.append(f"{first} {middle[0]} {last}")
-        names.append(f"{first} {middle} {last[0]}")
-        names.append(f"{first} {last}")
-        names.append(f"{first[0]} {last}")
-        names.append(f"{first} {last[0]}")
+        variants.update(
+            {
+                f"{first[0]} {middle} {last}",
+                f"{first} {middle[0]} {last}",
+                f"{first} {middle} {last[0]}",
+                f"{first} {last}",
+                f"{first[0]} {last}",
+                f"{first} {last[0]}",
+            }
+        )
 
-    for i in names:
-        if fuzz.token_sort_ratio(author, i) >= 90:
+    return variants
+
+
+def valid_name(variants, name):
+    name = name.replace(".", "").replace(",", "").lower()
+    for i in variants:
+        if fuzz.token_sort_ratio(i, name) >= 90:
+            return True
+    return False
+
+
+def valid_names(names: list[str], author: str):
+    variants = generate_variants(author)
+    for name in names:
+        if valid_name(variants, name):
             return True
     return False
 
@@ -99,37 +107,44 @@ async def dblp(session: aiohttp.ClientSession, author: str) -> list[tuple]:
         return []
 
 
+# 5.924
 async def arxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://export.arxiv.org/api/query?search_query=au:{quote(author)}"
+    results = []
     headers = {"User-Agent": random.choice(user_agents)}
     async with session.get(url, headers=headers) as response:
         if response.status == 200:
             content = await response.read()
-            results = feedparser.parse(content)["entries"]
-            source = ["arxiv"] * len(results)
-            titles = [i["title"] for i in results]
-            years = [extract_year(i["published"]) for i in results]
-            authors = [[author["name"] for author in i["authors"]] for i in results]
-            links = [i["link"] for i in results]
-            abstracts = [clean_abs(i["summary"]) for i in results]
-            return list(zip(source, titles, years, authors, links, abstracts))
-        return None
+            articles = feedparser.parse(content)["entries"]
+            for i in articles:
+                authors = [author["name"] for author in i["authors"]]
+                if valid_names(authors, author):
+                    title = i["title"]
+                    year = extract_year(i["published"])
+                    link = [i["link"] for i in results]
+                    abstract = [clean_abs(i["summary"]) for i in results]
+                    results.append(("arxiv", title, year, authors, link, abstract))
+    return results
 
 
 async def scholar(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://serpapi.com/search?engine=google_scholar&q=author:{quote(author)}&api_key={apidict['SERPAPI_KEY']}"
     async with session.get(url) as response:
+        results, tasks = [], []
         if response.status == 200:
             response = await response.json()
             articles = response["organic_results"]
-            source = ["scholar"] * len(articles)
-            titles = [i["title"] for i in articles]
-            years = [extract_year(i["publication_info"]["summary"]) for i in articles]
-            authors = [[author["name"] for author in i["publication_info"]["authors"]] for i in articles]
-            links = [i["link"] for i in articles]
-            abstract_tasks = [abstract(session, link) for link in links]
-            abstracts = await asyncio.gather(*abstract_tasks)
-            return list(zip(source, titles, years, authors, links, abstracts))
+            for i in articles:
+                authors = [author["name"] for author in i["publication_info"]["authors"]]
+                if valid_names(authors, author):
+                    title = i["title"]
+                    year = extract_year(i["publication_info"]["summary"])
+                    link = i["link"]
+                    tasks.append(abstract(session, link))
+                    results.append(("scholar", title, year, authors, link))
+
+            abstracts = await asyncio.gather(*tasks)
+            return [(a, b, c, d, e, f) for (a, b, c, d, e), f in zip(results, abstracts)]
         return None
 
 
@@ -137,20 +152,23 @@ async def pubmed(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://pubmed.ncbi.nlm.nih.gov/?term=%28{quote(author)}%5BAuthor%5D&sort="
     async with session.get(url) as response:
         if response.status == 200:
+            results, tasks = [], []
             response = await response.text()
 
             soup = BeautifulSoup(response, "lxml")
             baseurl = "https://pubmed.ncbi.nlm.nih.gov/"
             articles = soup.find_all("article", {"class": "full-docsum"})
-            source = ["pubmed"] * len(articles)
-            titles = [i.find("a", {"class": "docsum-title"}).text.strip() for i in articles]
-            years = [extract_year(i.find("span", {"class": "docsum-journal-citation short-journal-citation"}).text.strip()) for i in articles]
-            authors = [i.find("span", {"class": "docsum-authors full-authors"}).text.split(",") for i in articles]
-            links = [baseurl + i.find("span", {"class": "citation-part"}).text.split()[-1] for i in articles]
+            for i in articles:
+                authors = i.find("span", {"class": "docsum-authors full-authors"}).text.split(",")
+                if valid_names(authors, author):
+                    title = i.find("a", {"class": "docsum-title"}).text.strip()
+                    year = extract_year(i.find("span", {"class": "docsum-journal-citation short-journal-citation"}).text.strip())
+                    link = baseurl + i.find("span", {"class": "citation-part"}).text.split()[-1]
+                    tasks.append(abstract(session, link, "pubmed"))
+                    results.append(("pubmed", title, year, authors, link))
 
-            abstract_tasks = [abstract(session, link, "pubmed") for link in links]
-            abstracts = await asyncio.gather(*abstract_tasks)
-            return list(zip(source, titles, years, authors, links, abstracts))
+            abstracts = await asyncio.gather(*tasks)
+            return [(a, b, c, d, e, f) for (a, b, c, d, e), f in zip(results, abstracts)]
         return []
 
 
@@ -160,30 +178,28 @@ async def inspire(session: aiohttp.ClientSession, author: str) -> list[tuple]:
         if response.status == 200:
             response = await response.json()
             links = [i["links"]["json"] for i in response["hits"]["hits"]]
-            tasks = [worker(session, link, "inspire") for link in links]
+            tasks = [worker(session, link, "inspire", author) for link in links]
             return await asyncio.gather(*tasks)
         return []
 
 
 async def acmdl(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://dl.acm.org/action/doSearch?fillQuickSearch=false&target=advanced&expand=dl&field1=ContribAuthor&text1={quote(author)}"
+    results = []
     async with session.get(url) as response:
         if response.status == 200:
             response = await response.read()
             soup = BeautifulSoup(response, "lxml")
             articles = soup.find_all("li", {"class": "search__item issue-item-container"})
-            source = ["acmdl"] * len(articles)
-            titles = [i.find("span", {"class": "hlFld-Title"}).text for i in articles]
-            years = [extract_year(i.find("div", {"class": "bookPubDate simple-tooltip__block--b"}).text) for i in articles]
-            authors = [[j.text for j in i.find_all("span", {"class": "hlFld-ContribAuthor"})] for i in articles]
-            baseurl = "https://dl.acm.org"
-            links = [baseurl + i.find("span", {"class": "hlFld-Title"}).find("a").get("href") for i in articles]
-            abstracts = [clean_abs(i.find("div", {"class": "issue-item__abstract truncate-text"}).text.strip()) for i in articles]
-
-            # abstract_tasks = [abstract(session, link, "acmdl") for link in links]
-            # abstracts = await asyncio.gather(*abstract_tasks)
-            return list(zip(source, titles, years, authors, links, abstracts))
-        return []
+            for i in articles:
+                authors = [j.text for j in i.find_all("span", {"class": "hlFld-ContribAuthor"})]
+                if valid_names(authors, author):
+                    title = i.find("span", {"class": "hlFld-Title"}).text.strip()
+                    year = extract_year(i.find("div", {"class": "bookPubDate simple-tooltip__block--b"}).text)
+                    link = "https://dl.acm.org" + i.find("span", {"class": "hlFld-Title"}).find("a").get("href")
+                    abstract = clean_abs(i.find("div", {"class": "issue-item__abstract truncate-text"}).text.strip())
+                    results.append(("acmdl", title, year, authors, link, abstract))
+    return results
 
 
 async def biorxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
@@ -194,7 +210,7 @@ async def biorxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
             soup = BeautifulSoup(response, "lxml")
             baseurl = "https://www.biorxiv.org"
             links = [baseurl + i.get("href", None) for i in soup.find_all("a", {"class": "highwire-cite-linked-title"})]
-            tasks = [worker(session, link, "biorxiv") for link in links]
+            tasks = [worker(session, link, "biorxiv", author) for link in links]
             return await asyncio.gather(*tasks)
 
 
@@ -206,11 +222,11 @@ async def nature(session: aiohttp.ClientSession, author: str) -> list[tuple]:
             soup = BeautifulSoup(response, "lxml")
             baseurl = "https://www.nature.com"
             links = [baseurl + i.get("href", None) for i in soup.find_all("a", {"class": "c-card__link u-link-inherit"})]
-            tasks = [worker(session, link, "nature") for link in links]
+            tasks = [worker(session, link, "nature", author) for link in links]
             return await asyncio.gather(*tasks)
 
 
-async def worker(session: aiohttp.ClientSession, url: str, source: str) -> list[tuple]:
+async def worker(session: aiohttp.ClientSession, url: str, source: str, author: str) -> list[tuple]:
     """Worker for a secondary event loop.
 
     Args:
@@ -226,30 +242,33 @@ async def worker(session: aiohttp.ClientSession, url: str, source: str) -> list[
             if source == "inspire":
                 res = await response.json()
                 metadata = res["metadata"]
-                title = metadata["titles"][0]["title"]
-                year = metadata.get("publication_info", [{}])[0].get("year") or metadata.get("imprints", [{}])[0].get("date") or metadata.get("preprint_date")
                 authors = [i["full_name"] for i in metadata["authors"]]
-                link = url.replace("/api", "").replace("?format=json", "")
-                abstract = metadata["abstracts"][0]["value"]
-                return (source, title, extract_year(year), authors, link, clean_abs(abstract))
+                if valid_names(authors, author):
+                    title = metadata["titles"][0]["title"]
+                    year = metadata.get("publication_info", [{}])[0].get("year") or metadata.get("imprints", [{}])[0].get("date") or metadata.get("preprint_date")
+                    link = url.replace("/api", "").replace("?format=json", "")
+                    abstract = metadata["abstracts"][0]["value"]
+                    return (source, title, extract_year(year), authors, link, clean_abs(abstract))
 
             elif source == "biorxiv":
                 res = await response.read()
                 soup = BeautifulSoup(res, "lxml")
-                title = soup.find("h1", {"class": "highwire-cite-title"}).text.strip()
-                year = soup.find("div", {"class": "panel-pane pane-custom pane-1"}).text
                 authors = [i.text.strip() for i in soup.find_all("span", {"class": "highwire-citation-author"})]
-                abstract = soup.find("div", {"class": "highwire-markup"}).text.strip()
-                return (source, title, extract_year(year), authors, url, clean_abs(abstract))
+                if valid_names(authors, author):
+                    title = soup.find("h1", {"class": "highwire-cite-title"}).text.strip()
+                    year = soup.find("div", {"class": "panel-pane pane-custom pane-1"}).text
+                    abstract = soup.find("div", {"class": "highwire-markup"}).text.strip()
+                    return (source, title, extract_year(year), authors, url, clean_abs(abstract))
 
             elif source == "nature":
                 res = await response.read()
                 soup = BeautifulSoup(res, "lxml")
-                year = soup.find("time").text
-                title = soup.find("h1", {"class": "c-article-title"}).text.strip()
                 authors = [i.text for i in soup.find_all("li", {"class": "c-article-author-list__item"})]
-                abstract = soup.find("div", {"id": "Abs1-content", "class": "c-article-section__content"}).text.strip()
-                return (source, title, extract_year(year), authors, url, clean_abs(abstract))
+                if valid_names(authors, author):
+                    year = soup.find("time").text
+                    title = soup.find("h1", {"class": "c-article-title"}).text.strip()
+                    abstract = soup.find("div", {"id": "Abs1-content", "class": "c-article-section__content"}).text.strip()
+                    return (source, title, extract_year(year), authors, url, clean_abs(abstract))
 
 
 def clean_abs(abstract: str):
@@ -419,7 +438,7 @@ def extract_years(data):
 async def main(author):
     async with aiohttp.ClientSession() as session:
         functions = [dblp, arxiv, scholar, pubmed, inspire, acmdl, biorxiv, nature]
-        # functions = [dblp, inspire]
+        # functions = [arxiv]
         tasks = [function(session, author) for function in functions]
         return await asyncio.gather(*tasks)
 
@@ -432,4 +451,4 @@ if __name__ == "__main__":
 
     results = chain.from_iterable(results)
     df = pd.DataFrame(results)
-    df.to_excel("df3.xlsx")
+    df.to_excel("dfcheck.xlsx")
