@@ -1,0 +1,7 @@
+1. Add abstract logic for dblp and google scholar 
+2. valid_name chacking for all sources
+3. Author clean name while scraping
+4. Fastapi endpoints - query, filter, download
+5. implement cache for queries
+6. GAE vs AWS Apprunner
+7. 
