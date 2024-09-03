@@ -31,4 +31,5 @@ async def query(params=Depends(QParams)):
     author = params.author
     results = await main(author)
     results = list(chain.from_iterable(results))
+    results = [lst for lst in results if lst]
     return {"data": results}
