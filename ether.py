@@ -3,7 +3,7 @@ from urllib.parse import quote
 
 import aiohttp
 
-from app import user_agents
+from script import user_agents
 
 
 ### NOTE - IEEE and Scopus need Institute Ethernet for access
