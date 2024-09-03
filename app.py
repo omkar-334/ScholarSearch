@@ -1,11 +1,20 @@
 from itertools import chain
 
 from fastapi import Depends, FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
 from script import main
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 class QParams(BaseModel):
@@ -21,5 +30,5 @@ async def status():
 async def query(params=Depends(QParams)):
     author = params.author
     results = await main(author)
-    results = chain.from_iterable(results)
-    return results
+    results = list(chain.from_iterable(results))
+    return {"data": results}
