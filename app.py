@@ -2,7 +2,7 @@ import os
 from itertools import chain
 from typing import List
 
-import uvicorn
+# import uvicorn
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.exceptions import RequestValidationError
@@ -74,10 +74,10 @@ async def handler(request: Request, exc: RequestValidationError):
     return JSONResponse(status_code=422, content={"detail": error_details})
 
 
-if __name__ == "__main__":
-    uvicorn.run(
-        app,
-        port=8080,
-        host="0.0.0.0",
-        timeout_keep_alive=60,
-    )
+# if __name__ == "__main__":
+#     uvicorn.run(
+#         app,
+#         port=8080,
+#         host="0.0.0.0",
+#         timeout_keep_alive=60,
+#     )
