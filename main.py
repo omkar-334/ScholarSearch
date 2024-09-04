@@ -1,4 +1,6 @@
 import os
+import time
+from collections import defaultdict
 from itertools import chain
 from typing import List
 
@@ -27,10 +29,11 @@ app.add_middleware(
 
 
 @app.get("/")
-def root():
+def root(request: Request):
     return {
         "message": "Welcome to ScholarSearch API!",
         "endpoints": {"status", "query"},
+        "ip address": [request.client.host, request.headers.get("X-Forwarded-For", request.client.host)],
     }
 
 
@@ -39,10 +42,31 @@ async def status():
     return {"status": "200 OK"}
 
 
+last_request = defaultdict(int)
+RATE_LIMIT_SECONDS = 10
+
+
+def wait_till_request(ip: str):
+    now = time.time()
+    last_time = last_request[ip]
+
+    time_since_last_request = now - last_time
+    if time_since_last_request < RATE_LIMIT_SECONDS:
+        return RATE_LIMIT_SECONDS - time_since_last_request
+
+    last_request[ip] = now
+    return 0
+
+
 @app.get("/query")
-async def query(author: List[str] = Query(...), api_key: str = Query(...)):
+async def query(request: Request, author: List[str] = Query(...), api_key: str = Query(...)):
     if api_key != API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API key")
+
+    wait_time = wait_till_request(request.headers.get("X-Forwarded-For", request.client.host))
+
+    if wait_time > 0:
+        raise HTTPException(status_code=429, detail=f"Rate limit exceeded. Try again in {int(wait_time)} seconds.")
 
     for idx in range(len(author)):
         author[idx] = " ".join(author[idx].split())
