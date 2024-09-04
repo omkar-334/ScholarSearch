@@ -1,19 +1,20 @@
 import asyncio
+import os
 import random
 import re
-from itertools import chain
+import time
 from urllib.parse import quote
 
 import aiohttp
 import feedparser
-import pandas as pd
-import requests
 from bs4 import BeautifulSoup
 from bs4.element import Tag
-from dotenv import dotenv_values
+from dotenv import load_dotenv
 from fuzzywuzzy import fuzz
 
-apidict = dotenv_values()
+load_dotenv()
+SERPAPI_KEY = os.getenv("SERPAPI_KEY")
+
 user_agents = [
     "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.1 (KHTML, like Gecko) Chrome/22.0.1207.1 Safari/537.1",
     "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:55.0) Gecko/20100101 Firefox/55.0",
@@ -37,6 +38,10 @@ user_agents = [
     "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24",
     "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/535.24 (KHTML, like Gecko) Chrome/19.0.1055.1 Safari/535.24",
 ]
+
+
+def random_headers():
+    return {"User-Agent": random.choice(user_agents)}
 
 
 def generate_variants(author: str) -> set[str]:
@@ -81,27 +86,29 @@ def valid_names(names: list[str], author: str):
 
 
 async def dblp(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    t = time.time()
     url = f"https://dblp.org/search/author/api?q={quote(author)}&format=json"
-    headers = {"User-Agent": random.choice(user_agents)}
-    async with session.get(url, headers=headers) as response:
+    async with session.get(url, headers=random_headers()) as response:
         if response.status == 200:
             data = await response.json()
             hits = data.get("result", {}).get("hits", {}).get("hit", {})
-            articles = []
             for i in hits:
                 info = i["info"]
                 if valid_name(generate_variants(author), info["author"]):
                     url = info.get("url") + ".xml"
-                    soup = BeautifulSoup(requests.get(url).content, features="xml")
-                    articles = soup.find_all("article")
-                    source = ["dblp"] * len(articles)
-                    titles = [i.find("title").text.strip() for i in articles]
-                    years = [extract_year(i.find("year").text) for i in articles]
-                    authors = [[author.text for author in i.find_all("author")] for i in articles]
-                    links = [i.find("ee").text for i in articles]
-                    tasks = [abstract(session, link) for link in links]
-                    abstracts = await asyncio.gather(*tasks)
-                    return list(zip(source, titles, years, authors, links, abstracts))
+                    print(url, time.time() - t)
+                    async with session.get(url, headers=random_headers()) as response:
+                        res = await response.read()
+                        soup = BeautifulSoup(res, features="xml")
+                        articles = soup.find_all("article")
+                        source = ["dblp"] * len(articles)
+                        titles = [i.find("title").text.strip() for i in articles]
+                        years = [extract_year(i.find("year").text) for i in articles]
+                        authors = [[author.text for author in i.find_all("author")] for i in articles]
+                        links = [i.find("ee").text for i in articles]
+                        tasks = [abstract(session, link) for link in links]
+                        abstracts = await asyncio.gather(*tasks)
+                        return list(zip(source, titles, years, authors, links, abstracts))
         return []
 
 
@@ -109,8 +116,7 @@ async def dblp(session: aiohttp.ClientSession, author: str) -> list[tuple]:
 async def arxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://export.arxiv.org/api/query?search_query=au:{quote(author)}"
     results = []
-    headers = {"User-Agent": random.choice(user_agents)}
-    async with session.get(url, headers=headers) as response:
+    async with session.get(url, headers=random_headers()) as response:
         if response.status == 200:
             content = await response.read()
             articles = feedparser.parse(content)["entries"]
@@ -126,8 +132,8 @@ async def arxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
 
 
 async def scholar(session: aiohttp.ClientSession, author: str) -> list[tuple]:
-    url = f"https://serpapi.com/search?engine=google_scholar&q=author:{quote(author)}&api_key={apidict['SERPAPI_KEY']}"
-    async with session.get(url) as response:
+    url = f"https://serpapi.com/search?engine=google_scholar&q=author:{quote(author)}&api_key={SERPAPI_KEY}"
+    async with session.get(url, headers=random_headers()) as response:
         results, tasks = [], []
         if response.status == 200:
             response = await response.json()
@@ -148,7 +154,7 @@ async def scholar(session: aiohttp.ClientSession, author: str) -> list[tuple]:
 
 async def pubmed(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://pubmed.ncbi.nlm.nih.gov/?term=%28{quote(author)}%5BAuthor%5D&sort="
-    async with session.get(url) as response:
+    async with session.get(url, headers=random_headers()) as response:
         if response.status == 200:
             results, tasks = [], []
             response = await response.text()
@@ -172,7 +178,7 @@ async def pubmed(session: aiohttp.ClientSession, author: str) -> list[tuple]:
 
 async def inspire(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://inspirehep.net/api/literature?sort=mostrecent&size=50&page=1&q=a%3A{quote(author)}"
-    async with session.get(url) as response:
+    async with session.get(url, headers=random_headers()) as response:
         if response.status == 200:
             response = await response.json()
             links = [i["links"]["json"] for i in response["hits"]["hits"]]
@@ -184,7 +190,7 @@ async def inspire(session: aiohttp.ClientSession, author: str) -> list[tuple]:
 async def acmdl(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://dl.acm.org/action/doSearch?fillQuickSearch=false&target=advanced&expand=dl&field1=ContribAuthor&text1={quote(author)}"
     results = []
-    async with session.get(url) as response:
+    async with session.get(url, headers=random_headers()) as response:
         if response.status == 200:
             response = await response.read()
             soup = BeautifulSoup(response, "lxml")
@@ -202,7 +208,7 @@ async def acmdl(session: aiohttp.ClientSession, author: str) -> list[tuple]:
 
 async def biorxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://www.biorxiv.org/search/%20author1%3A{quote(author)}%20jcode%3Abiorxiv%20numresults%3A75%20sort%3Arelevance-rank%20format_result%3Astandard"
-    async with session.get(url) as response:
+    async with session.get(url, headers=random_headers()) as response:
         if response.status == 200:
             response = await response.read()
             soup = BeautifulSoup(response, "lxml")
@@ -214,7 +220,7 @@ async def biorxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
 
 async def nature(session: aiohttp.ClientSession, author: str) -> list[tuple]:
     url = f"https://www.nature.com/search?author={quote(author)}&order=relevance"
-    async with session.get(url) as response:
+    async with session.get(url, headers=random_headers()) as response:
         if response.status == 200:
             response = await response.read()
             soup = BeautifulSoup(response, "lxml")
@@ -334,8 +340,7 @@ async def abstract(session: aiohttp.ClientSession, url: str, source: str = None)
     if source == "openreview":
         return
 
-    headers = {"User-Agent": random.choice(user_agents)}
-    async with session.get(url, headers=headers) as response:
+    async with session.get(url, headers=random_headers()) as response:
         abstract = None
 
         if response.status == 200:
@@ -438,21 +443,31 @@ def extract_years(data):
     return years
 
 
-async def main(author):
+async def main(author, functions: list = None):
     async with aiohttp.ClientSession() as session:
-        functions = [arxiv, pubmed, inspire, acmdl, biorxiv, nature]
-        # overhead = [dblp, scholar]
+        if not functions:
+            functions = [arxiv, pubmed, inspire, acmdl, biorxiv, nature]
         tasks = [function(session, author) for function in functions]
+        print(author)
         return await asyncio.gather(*tasks)
 
 
-if __name__ == "__main__":
-    author = "Yann LeCun"
+async def multimain(authors: list[str]):
+    tasks = [main(author) for author in authors]
+    results = await asyncio.gather(*tasks)
 
-    loop = asyncio.get_event_loop()
-    results = loop.run_until_complete(main(author))
+    results = [item for sublist in results for item in sublist]
+    return results
 
-    results = chain.from_iterable(results)
-    print(len(results))
-    # df = pd.DataFrame(results)
-    # df.to_excel("papers.xlsx")
+
+def validate_query(author: str):
+    author = author.strip()
+    if not author or author == "":
+        return False
+    if len(author.split()) <= 1:
+        return False
+    if len(author) > 25:
+        return False
+    if not re.match(r"^[A-Za-z\s]+$", author):
+        return False
+    return True
