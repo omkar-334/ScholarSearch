@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "gis-python-413005",
+  "private_key_id": "c58ae4bf63be58b86fbd73f520cf92a1134eaf1e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQC6cT7fC4/JCmb0\ncapWEfR2y0k9ZbREozV1MdHCHKau6/Q5E1XSqql0PruLQgCiLT/gue37bUHU4gpg\nMnmo+H20phZC6WTNQcr+UdnfoKdYzUF3mLmoAswcpNo11YCX8dJz1Bfpz4gYGhKU\nwYAH/G27GANK4ekfbjdXcew5bz3nbg5jOtViqQKQXj9VI0BMZNwIGPhT0Qdic9jD\niDEM0njVNuPOcCpah6QCE5AGrvGqt5XfLgCys5LaDNIc1FvnCd+zprvfpX4MSVfL\npWsrTD2GPEvbp4SNTYzvzmmI0gYrri3gAZW+f8RF8S71IeZYET1AyeNRvy/z0YGp\nK8vw0m9FAgMBAAECggEAUFkomrAdXastdnAb0+7191IhdKPFfgUGL0TynGCDlwPZ\n4tUJ2fmxgIbehSPDKSEuE7edL4tE4S0vAokONDsu1XD0TA7QYcLWbCazKfRO2m7O\npW98p0LZWwjSf3vM6O6O31sKmTlWceielFwVxJtNYOF23ckhEeoKUJWok5H00Cy6\nGXgL2T81WlqLoQItaCeNJ9jV7IU/0mkDf9ZMFF/WhdqExCy9PuVvErXBdjV6Mfkv\nsjztwMZPcK6WkO18D08BtFoLDqwKJCB6/kuIF8PkzFmWx5gp7CuDS3X8jGdd6Ycb\nlK5IhYEtixkgHSw/obr+nj0BOEQAZ3g5tfyW/R1UiwKBgQDbCp6a0Z5Iw3lBVbAh\n838PQ3y/PQVYPPmXtoQgzYB91o3bbgs4o2EhGAtfocX4sjVEmt4ukZSzg/6at3KF\nk7WnYk9L7WAawUSAlD0BljATcIL67sV7aBggUjZLBN1xVt6mo2ioHFz/VgpnKq4p\nzZwHCOPvqQHWHWJsspNMfinjKwKBgQDZ5oZF1u36ccnOBXzzAlT9df5SEPhuIO71\neMVb93q+CZPZV24QNvTJUC9oVUsT9ZdtESFviubdIjfTvcrTdWeUpS+my6ArnZ90\nMHuTJuaLqC56A/S5wUc/v7aVVRKMeadL7HDataYceHMZSro/U3J1K6R/CxrlDWf1\n4FFvoRl/TwKBgQCYHATOUHkR4KToyR+aRCTdLamIiFCY2ScewwF4Yh0zxfYXBpFG\nULbXq4HidE4tiVvSe5WFU1WnYCdDu9cMienhBjU47ewKSGJQxCClZG2YYk6jAYMk\nUsJGV7EaYZOB7KiLofjAnYm7Sz3ILOxrXTxX6kWXnY8H6Ln77/q4aPifpwKBgG0O\n7MtNrGQ5yVg89PGnjCQjhztJ1R1BjHf9j0HdVmiA4KfaE3M4HkIXyPJ+JgqCU9y5\nwzNRoQSymKB4kGhPjZ0fI/9mUO8jf+gmT+MxiBgD/+b/zd+etetZJ6gMITF/vdTJ\nLR655b7AJlNVTGxfdpzgT/9p7ncPw6WTNQ8a4WkPAoGAJXbFEgM6EjQKKk0KOHgF\nKBZS4jZgMOJYDKDqoSIXIZCu3dozBddHeP5GPB05f5ULsVR23h9UYSpZZRW4BXIG\nWTdASWkxb8F/YfFQB2MndS1ECjr/A/8d9TSGj5QMPKHYqKa7InzCTl4E/bXBApWj\ngbVN+MbNMz8LG/qXXprKOl8=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-sa8bm@gis-python-413005.iam.gserviceaccount.com",
+  "client_id": "111597663713334931101",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-sa8bm%40gis-python-413005.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
