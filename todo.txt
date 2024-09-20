@@ -51,3 +51,16 @@ Current Databases
    - Westlaw
    - LexisNexis
    - Harvard Business Review
+
+
+list of authors - fetchL and scrapeL
+
+1. check if author exists
+      if exists:
+         fetchL.append(scrapeL.pop(author))
+      else:
+         pass
+2. multimain(scrapeL)
+3. fetch_from_db(fetchL)
+4. bg_tasks.add(scrapeL)
+return scrapeL + fetchL
