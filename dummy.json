@@ -1,0 +1,463 @@
+{
+    "Rajanikanth Aluvalu": {
+        "data": [
+            {
+                "source": "arxiv",
+                "title": "Co/Ni multilayers for spintronics: high spin-polarization and tunable\n  magnetic anisotropy",
+                "year": 2018,
+                "authors": [
+                    "S. Andrieu",
+                    "T. Hauet",
+                    "M. Gottwald",
+                    "A. Rajanikanth",
+                    "L. Calmels",
+                    "A. M. Bataille",
+                    "F. Montaigne",
+                    "S. Mangin",
+                    "E. Otero",
+                    "P. Ohresser",
+                    "P. Le Fevre",
+                    "F. Bertran",
+                    "A. Resta",
+                    "A. Vlad",
+                    "A. Coati",
+                    "Y. Garreau"
+                ],
+                "link": "http://arxiv.org/abs/1802.02020v1",
+                "abstract": "In this paper we analyze in details the electronic properties of (Co/Ni)multilayers, a model system for spintronics devices. We use magneto-opticalKerr (MOKE), spin-polarized photoemission spectroscopy (SRPES), x-ray magneticcircular dichroism (XMCD) and anomalous surface diffraction experiments toinvestigate the electronic properties and perpendicular magnetic anisotropy(PMA) in [Co(x)/Ni(y)] single-crystalline stacks grown by molecular beamepitaxy."
+            },
+            {
+                "source": "pubmed",
+                "title": "Hybrid Optimized GRU-ECNN Models for Gait Recognition with Wearable IOT Devices.",
+                "year": 2022,
+                "authors": [
+                    "Monica KM",
+                    "Parvathi R",
+                    "Gayathri A",
+                    "Aluvalu R",
+                    "Sangeetha K",
+                    "Simha Reddy CV."
+                ],
+                "link": "https://pubmed.ncbi.nlm.nih.gov/in:",
+                "abstract": null
+            },
+            {
+                "source": "pubmed",
+                "title": "A novel artificial intelligence-based predictive analytics technique to detect skin cancer.",
+                "year": 2023,
+                "authors": [
+                    "Balaji P",
+                    "Hung BT",
+                    "Chakrabarti P",
+                    "Chakrabarti T",
+                    "Elngar AA",
+                    "Aluvalu R."
+                ],
+                "link": "https://pubmed.ncbi.nlm.nih.gov/37346565",
+                "abstract": "One of the leading causes of death among people around the world is skin cancer. It is critical to identify and classify skin cancer early to assist patients in taking the right course of action. Additionally, melanoma, one of the main skin cancer illnesses, is curable when detected and treated at an early stage. More than 75% of fatalities worldwide are related to skin cancer. A novel Artificial Golden Eagle-based Random Forest (AGEbRF) is created in this study to predict skin cancer cells at an early stage. Dermoscopic images are used in this instance as the dataset for the system's training. Additionally, the dermoscopic image information is processed using the established AGEbRF function to identify and segment the skin cancer-affected area. Additionally, this approach is simulated using a Python program, and the current research's parameters are assessed against those of earlier studies. The results demonstrate that, compared to other models, the new research model produces better accuracy for predicting skin cancer by segmentation.              Keywords:                    Artificial intelligence; Deep learning; Machine learning; Malignant tumors; Skin cancer."
+            },
+            {
+                "source": "pubmed",
+                "title": "Diagnostic structure of visual robotic inundated systems with fuzzy clustering membership correlation.",
+                "year": 2023,
+                "authors": [
+                    "Manoharan H",
+                    "Selvarajan S",
+                    "Aluvalu R",
+                    "Abdelhaq M",
+                    "Alsaqour R",
+                    "Uddin M."
+                ],
+                "link": "https://pubmed.ncbi.nlm.nih.gov/38192458",
+                "abstract": "The process of using robotic technology to examine underwater systems is still a difficult undertaking because the majority of automated activities lack network connectivity. Therefore, the suggested approach finds the main hole in undersea systems and fills it using robotic automation. In the predicted model, an analytical framework is created to operate the robot within predetermined areas while maximizing communication ranges. Additionally, a clustering algorithm with a fuzzy membership function is implemented, allowing the robots to advance in accordance with predefined clusters and arrive at their starting place within a predetermined amount of time. A cluster node is connected in each clustered region and provides the central control center with the necessary data. The weights are evenly distributed, and the designed robotic system is installed to prevent an uncontrolled operational state. Five different scenarios are used to test and validate the created model, and in each case, the proposed method is found to be superior to the current methodology in terms of range, energy, density, time periods, and total metrics of operation.              Keywords:                    Errors; Fuzzy clustering; Robot; Underwater."
+            },
+            {
+                "source": "pubmed",
+                "title": "Efficient data transmission on wireless communication through a privacy-enhanced blockchain process.",
+                "year": 2023,
+                "authors": [
+                    "Aluvalu R",
+                    "Kumaran V N S",
+                    "Thirumalaisamy M",
+                    "Basheer S",
+                    "Ali Aldhahri E",
+                    "Selvarajan S."
+                ],
+                "link": "https://pubmed.ncbi.nlm.nih.gov/37346706",
+                "abstract": "In the medical era, wearables often manage and find the specific data points to check important data like resting heart rate, ECG voltage, SPO2, sleep patterns like length, interruptions, and intensity, and physical activity like kind, duration, and levels. These digital biomarkers are created mainly through passive data collection from various sensors. The critical issues with this method are time and sensitivity. We reviewed the newest wireless communication trends employed in hospitals using wearable technology and privacy and Block chain to solve this problem. Based on sensors, this wireless technology controls the data gathered from numerous locations. In this study, the wearable sensor contains data from the various departments of the system. The gradient boosting method and the hybrid microwave transmission method have been proposed to find the location and convince people. The patient health decision has been submitted to hybrid microwave transmission using gradient boosting. This will help to trace the mobile phones using the calls from the threatening person, and the data is gathered from the database while tracing. From this concern, the data analysis process is based on decision-making. They adapted the data encountered by the detailed data in the statistical modeling of the system to produce exploratory data analysis for satisfying the data from the database. Complete data is classified with a 97% outcome by removing unwanted data and making it a 98% successful data classification.              Keywords:                    Blockchain; Data management; Gradient boosting; Hybrid microwave transmission; Wireless technology."
+            },
+            {
+                "source": "pubmed",
+                "title": "A review of microscopic analysis of blood cells for disease detection with AI perspective.",
+                "year": 2021,
+                "authors": [
+                    "Deshpande NM",
+                    "Gite S",
+                    "Aluvalu R."
+                ],
+                "link": "https://pubmed.ncbi.nlm.nih.gov/33981834",
+                "abstract": "Background:                    Any contamination in the human body can prompt changes in blood cell morphology and various parameters of cells. The minuscule images of blood cells are examined for recognizing the contamination inside the body with an expectation of maladies and variations from the norm. Appropriate segmentation of these cells makes the detection of a disease progressively exact and vigorous. Microscopic blood cell analysis is a critical activity in the pathological analysis. It highlights the investigation of appropriate malady after exact location followed by an order of abnormalities, which assumes an essential job in the analysis of various disorders, treatment arranging, and assessment of results of treatment.              Methodology:                    A survey of different areas where microscopic imaging of blood cells is used for disease detection is done in this paper. Research papers from this area are obtained from a popular search engine, Google Scholar. The articles are searched considering the basics of blood such as its composition followed by staining of blood, that is most important and mandatory before microscopic analysis. Different methods for classification, segmentation of blood cells are reviewed. Microscopic analysis using image processing, computer vision and machine learning are the main focus of the analysis and the review here. Methodologies employed by different researchers for blood cells analysis in terms of these mentioned algorithms is the key point of review considered in the study.              Results:                    Different methodologies used for microscopic analysis of blood cells are analyzed and are compared according to different performance measures. From the extensive review the conclusion is made.              Conclusion:                    There are different machine learning and deep learning algorithms employed by researchers for segmentation of blood cell components and disease detection considering microscopic analysis. There is a scope of improvement in terms of different performance evaluation parameters. Different bio-inspired optimization algorithms can be used for improvement. Explainable AI can analyze the features of AI implemented system and will make the system more trusted and commercially suitable.              Keywords:                    Blood cell; Classifier; Disease detection; Feature extraction; Image processing; Leukemia; Microscopic images; Neural network; Red blood cell; White blood cell."
+            },
+            {
+                "source": "pubmed",
+                "title": "An improved GBSO-TAENN-based EEG signal classification model for epileptic seizure detection.",
+                "year": 2024,
+                "authors": [
+                    "Kantipudi MVVP",
+                    "Kumar NSP",
+                    "Aluvalu R",
+                    "Selvarajan S",
+                    "Kotecha K."
+                ],
+                "link": "https://pubmed.ncbi.nlm.nih.gov/38191643",
+                "abstract": "Detection and classification of epileptic seizures from the EEG signals have gained significant attention in recent decades. Among other signals, EEG signals are extensively used by medical experts for diagnosing purposes. So, most of the existing research works developed automated mechanisms for designing an EEG-based epileptic seizure detection system. Machine learning techniques are highly used for reduced time consumption, high accuracy, and optimal performance. Still, it limits by the issues of high complexity in algorithm design, increased error value, and reduced detection efficacy. Thus, the proposed work intends to develop an automated epileptic seizure detection system with an improved performance rate. Here, the Finite Linear Haar wavelet-based Filtering (FLHF) technique is used to filter the input signals and the relevant set of features are extracted from the normalized output with the help of Fractal Dimension (FD) analysis. Then, the Grasshopper Bio-Inspired Swarm Optimization (GBSO) technique is employed to select the optimal features by computing the best fitness value and the Temporal Activation Expansive Neural Network (TAENN) mechanism is used for classifying the EEG signals to determine whether normal or seizure affected. Numerous intelligence algorithms, such as preprocessing, optimization, and classification, are used in the literature to identify epileptic seizures based on EEG signals. The primary issues facing the majority of optimization approaches are reduced convergence rates and higher computational complexity. Furthermore, the problems with machine learning approaches include a significant method complexity, intricate mathematical calculations, and a decreased training speed. Therefore, the goal of the proposed work is to put into practice efficient algorithms for the recognition and categorization of epileptic seizures based on EEG signals. The combined effect of the proposed FLHF, FD, GBSO, and TAENN models might dramatically improve disease detection accuracy while decreasing complexity of system along with time consumption as compared to the prior techniques. By using the proposed methodology, the overall average epileptic seizure detection performance is increased to 99.6% with f-measure of 99% and G-mean of 98.9% values."
+            },
+            {
+                "source": "acmdl",
+                "title": "Cluster Based Ensemble Classification for Intrusion Detection System",
+                "year": 2017,
+                "authors": [
+                    "M. A. Jabbar",
+                    "Rajanikanth Aluvalu",
+                    "S. Sai Satyanarayana Reddy"
+                ],
+                "link": "https://dl.acm.org/doi/10.1145/3055635.3056595",
+                "abstract": "Network security is a challenging task, as there is a tremendous growth of network -based services and sharing of sensitive information on the network. Intrusion throws a serious risk in the network. Even though many hardening systems are developed ..."
+            },
+            {
+                "source": "nature",
+                "title": "An improved GBSO-TAENN-based EEG signal classification model for epileptic seizure detection",
+                "year": 2024,
+                "authors": [
+                    "M. V. V. Prasad Kantipudi",
+                    "N. S. Pradeep Kumar",
+                    "Rajanikanth Aluvalu",
+                    "Shitharth Selvarajan45",
+                    "K Kotecha16 na1"
+                ],
+                "link": "https://www.nature.com/articles/s41598-024-51337-8",
+                "abstract": "Detection and classification of epileptic seizures from the EEG signals have gained significant attention in recent decades. Among other signals, EEG signals are extensively used by medical experts for diagnosing purposes. So, most of the existing research works developed automated mechanisms for designing an EEG-based epileptic seizure detection system. Machine learning techniques are highly used for reduced time consumption, high accuracy, and optimal performance. Still, it limits by the issues of high complexity in algorithm design, increased error value, and reduced detection efficacy. Thus, the proposed work intends to develop an automated epileptic seizure detection system with an improved performance rate. Here, the Finite Linear Haar wavelet-based Filtering (FLHF) technique is used to filter the input signals and the relevant set of features are extracted from the normalized output with the help of Fractal Dimension (FD) analysis. Then, the Grasshopper Bio-Inspired Swarm Optimization (GBSO) technique is employed to select the optimal features by computing the best fitness value and the Temporal Activation Expansive Neural Network (TAENN) mechanism is used for classifying the EEG signals to determine whether normal or seizure affected. Numerous intelligence algorithms, such as preprocessing, optimization, and classification, are used in the literature to identify epileptic seizures based on EEG signals. The primary issues facing the majority of optimization approaches are reduced convergence rates and higher computational complexity. Furthermore, the problems with machine learning approaches include a significant method complexity, intricate mathematical calculations, and a decreased training speed. Therefore, the goal of the proposed work is to put into practice efficient algorithms for the recognition and categorization of epileptic seizures based on EEG signals. The combined effect of the proposed FLHF, FD, GBSO, and TAENN models might dramatically improve disease detection accuracy while decreasing complexity of system along with time consumption as compared to the prior techniques. By using the proposed methodology, the overall average epileptic seizure detection performance is increased to 99.6% with f-measure of 99% and G-mean of 98.9% values."
+            },
+            {
+                "source": "scholar",
+                "title": "RFAODE: A novel ensemble intrusion detection system",
+                "year": 2017,
+                "authors": [
+                    "MA Jabbar",
+                    "R Aluvalu"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:ZfRJV9d4-WMC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Autonomous vehicles and intelligent automation: Applications, challenges, and opportunities",
+                "year": 2022,
+                "authors": [
+                    "G Bathla",
+                    "K Bhadane",
+                    "RK Singh",
+                    "R Kumar",
+                    "R Aluvalu",
+                    "R Krishnamurthi",
+                    "..."
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:XoXfffV-tXoC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Cluster based ensemble classification for intrusion detection system",
+                "year": 2017,
+                "authors": [
+                    "MA Jabbar",
+                    "R Aluvalu",
+                    "SSS Reddy"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:tKAzc9rXhukC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "AI based emotion detection for textual big data: Techniques and contribution",
+                "year": 2021,
+                "authors": [
+                    "S Kusal",
+                    "S Patil",
+                    "K Kotecha",
+                    "R Aluvalu",
+                    "V Varadarajan"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:LI9QrySNdTsC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "The Future of Health care: Machine Learning",
+                "year": 2018,
+                "authors": [
+                    "shirina samreen Jabbar akhil",
+                    "Rajanikanth Aluvalu"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:0KyAp5RtaNEC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "A survey on access control models in cloud computing",
+                "year": 2015,
+                "authors": [
+                    "RK Aluvalu",
+                    "L Muddana"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:u-x6o8ySG0sC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "A review of microscopic analysis of blood cells for disease detection with AI perspective",
+                "year": 2021,
+                "authors": [
+                    "NM Deshpande",
+                    "S Gite",
+                    "R Aluvalu"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:vbGhcppDl1QC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Bio-signals in medical applications and challenges using artificial intelligence",
+                "year": 2022,
+                "authors": [
+                    "M Swapna",
+                    "UM Viswanadhula",
+                    "R Aluvalu",
+                    "V Vardharajan",
+                    "K Kotecha"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:SpbeaW3--B0C",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Cervical cancer diagnosis using intelligent living behavior of artificial jellyfish optimized with artificial neural network",
+                "year": 2022,
+                "authors": [
+                    "D Devarajan",
+                    "DS Alex",
+                    "TR Mahesh",
+                    "VV Kumar",
+                    "R Aluvalu",
+                    "VU Maheswari",
+                    "..."
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:kh2fBNsKQNwC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Emerging ICT for Bridging the Future-Proceedings of the 49th Annual Convention of the Computer Society of India (CSI) Volume 1",
+                "year": 2014,
+                "authors": [
+                    "SC Satapathy",
+                    "A Govardhan",
+                    "KS Raju",
+                    "JK Mandal"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:yB1At4FlUx8C",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "The novel emergency hospital services for patients using digital twins",
+                "year": 2023,
+                "authors": [
+                    "R Aluvalu",
+                    "S Mudrakola",
+                    "AC Kaladevi",
+                    "MVS Sandhya",
+                    "CR Bhat"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:9pM33mqn1YgC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "An Authentication Model with High Security for Cloud Database",
+                "year": 2021,
+                "authors": [
+                    "KK Chennam",
+                    "R Aluvalu",
+                    "S Shitharth"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:L7CI7m0gUJcC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Intrusion detection system using bayesian network and feature subset selection",
+                "year": 2017,
+                "authors": [
+                    "MA Jabbar",
+                    "R Aluvalu",
+                    "SSS Reddy"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:uJ-U7cs_P_0C",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Enhancing cloud security through access control models: A survey",
+                "year": 2015,
+                "authors": [
+                    "C Langaliya",
+                    "R Aluvalu"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:IjCSPb-OGe4C",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Data Security in Cloud Computing Using Abe-Based Access Control",
+                "year": 2021,
+                "authors": [
+                    "R Aluvalu",
+                    "VU Maheswari",
+                    "KK Chennam",
+                    "S Shitharth"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:EYYDruWGBe4C",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "HASBE Access Control Model with Secure Key Distribution and Efficient Domain Hierarchy for Cloud Computing.",
+                "year": 2016,
+                "authors": [
+                    "R Aluvalu",
+                    "V Kamliya",
+                    "L Muddana"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:Y0pCki6q_DkC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Leaf disease classification in smart agriculture using deep neural network architecture and IoT",
+                "year": 2022,
+                "authors": [
+                    "K Ramana",
+                    "R Aluvala",
+                    "MR Kumar",
+                    "G Nagaraja",
+                    "AV Krishna",
+                    "P Nagendra"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:0N-VGjzr574C",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "An efficient multilevel thresholding scheme for heart image segmentation using a hybrid generalized adversarial network",
+                "year": 2022,
+                "authors": [
+                    "AM Reddy",
+                    "KS Reddy",
+                    "M Jayaram",
+                    "N Venkata Maha Lakshmi",
+                    "R Aluvalu",
+                    "..."
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:Ri6SYOTghG4C",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Application of machine learning algorithms for facial expression analysis",
+                "year": 2021,
+                "authors": [
+                    "V Uma Maheswari",
+                    "R Aluvalu",
+                    "KK Chennam"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:lmc2jWPfTJgC",
+                "abstract": null
+            },
+            {
+                "source": "scholar",
+                "title": "Performance analysis of various encryption algorithms for usage in multistage encryption for securing data in cloud",
+                "year": 2017,
+                "authors": [
+                    "KK Chennam",
+                    "L Muddana",
+                    "RK Aluvalu"
+                ],
+                "link": "https://scholar.google.com/citations?view_op=view_citation&hl=en&user=rHQkh6MAAAAJ&citation_for_view=rHQkh6MAAAAJ:35r97b3x0nAC",
+                "abstract": null
+            }
+        ],
+        "info": {
+            "name": "Dr RajaniKanth Aluvalu",
+            "affiliations": "Director, SIT,symbiosis International(Deemed University),Hyderabad,India",
+            "email": "Verified email at ieee.org",
+            "website": "https://rajnikanthteachingprofile.weebly.com/",
+            "thumbnail": "https://scholar.googleusercontent.com/citations?view_op=view_photo&user=rHQkh6MAAAAJ&citpid=7",
+            "graph": [
+                {
+                    "year": 2015,
+                    "citations": 8
+                },
+                {
+                    "year": 2016,
+                    "citations": 30
+                },
+                {
+                    "year": 2017,
+                    "citations": 29
+                },
+                {
+                    "year": 2018,
+                    "citations": 50
+                },
+                {
+                    "year": 2019,
+                    "citations": 69
+                },
+                {
+                    "year": 2020,
+                    "citations": 60
+                },
+                {
+                    "year": 2021,
+                    "citations": 160
+                },
+                {
+                    "year": 2022,
+                    "citations": 252
+                },
+                {
+                    "year": 2023,
+                    "citations": 455
+                },
+                {
+                    "year": 2024,
+                    "citations": 370
+                }
+            ],
+            "citations": {
+                "all": 1522,
+                "since_2019": 1396
+            },
+            "h_index": {
+                "all": 23,
+                "since_2019": 21
+            },
+            "i10_index": {
+                "all": 44,
+                "since_2019": 43
+            },
+            "summary":"**Introduction:**\nThe author's research area is focused on engineering and computer science, with a primary emphasis on developing innovative solutions for various applications, including spintronics, artificial intelligence, robotics, and biomedical engineering.\n\n**Key Contributions:**\n\n* Developed a novel artificial intelligence-based predictive analytics technique to detect skin cancer using dermoscopic images, achieving better accuracy compared to other models.\n* Designed an improved GBSO-TAENN-based EEG signal classification model for epileptic seizure detection, achieving an overall average detection performance of 99.6% with high f-measure and G-mean values.\n* Demonstrated the application of fuzzy clustering and machine learning techniques for robotic systems in underwater exploration, achieving superior performance in terms of range, energy, and time.\n* Conducted a review of microscopic analysis of blood cells for disease detection using AI perspective, highlighting the potential of image processing, computer vision, and machine learning algorithms for segmentation and classification.\n* Developed an efficient data transmission method for wireless communication using a privacy-enhanced blockchain process, enabling secure and efficient data transmission.\n\n**Research Focus:**\nThe author is known for their research focus on machine learning, artificial intelligence, and robotics, as well as their application in various fields, including biomedical engineering, spintronics, and wireless communication. They have made significant contributions to the development of innovative solutions for disease detection, robotic systems, and data transmission.\n\n**Overall Impact:**\nThe author's work has significant implications for various fields, including healthcare, robotics, and wireless communication. Their contributions have the potential to improve disease detection accuracy, enhance robotic systems for underwater exploration, and ensure secure and efficient data transmission. Overall, the author's research has the potential to make a significant impact in various industries and fields, as well as contribute to the advancement of science and technology."
+        }
+    }
+}
