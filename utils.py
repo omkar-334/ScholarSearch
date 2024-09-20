@@ -66,19 +66,29 @@ def generate_variants(author: str) -> set[str]:
     return variants
 
 
-def valid_name(variants, name):
+def valid_name(variants, name, ratio=None):
+    if not ratio:
+        ratio = 90
     name = name.replace(".", "").replace(",", "").lower()
     for i in variants:
-        if fuzz.token_sort_ratio(i, name) >= 90:
+        if fuzz.token_sort_ratio(i, name) >= ratio:
             return True
     return False
 
 
-def valid_names(names: list[str], author: str):
+def valid_names(names: list[str], author: str, ratio=None):
     variants = generate_variants(author)
     for name in names:
-        if valid_name(variants, name):
+        if valid_name(variants, name, ratio):
             return True
+    return False
+
+
+def valid_affil(query, result):
+    if query in result or result in query:
+        return True
+    if fuzz.token_sort_ratio(result, query) >= 80:
+        return True
     return False
 
 
@@ -188,13 +198,18 @@ async def abstract(session: aiohttp.ClientSession, url: str, source: str = None)
 
         if response.status == 200:
             # DOI reroutes websites, so checking URL of response is necessary.
-            if source in ["doi"]:
+            if source == "doi":
                 url = str(response.url)
                 print(url)
                 if not (source := extract_source(url)):
                     response = await response.json()
                     print(response)
                     return None
+
+            elif source == "scholar":
+                response = await response.read()
+                soup = BeautifulSoup(response, "html.parser")
+                abstract = soup.find("div", {"class": "gsh_small"})
 
             if source == "pubmed":
                 response = await response.text()
