@@ -14,8 +14,60 @@ from utils import (
     extract_year,
     random_headers,
     to_dict,
+    valid_affil,
     valid_names,
 )
+
+
+async def linker(session: aiohttp.ClientSession, author: str) -> list[tuple]:
+    url = f"https://serpapi.com/search?engine=google_scholar&q=author:{quote(author)}&api_key={SERPAPI_KEY}"
+    async with session.get(url, headers=random_headers()) as response:
+        if response.status == 200:
+            response = await response.json()
+            articles = response["organic_results"]
+            linkmap = {i["title"]: i.get("link", "") for i in articles}
+            return linkmap
+
+
+async def scholar(session: aiohttp.ClientSession, author: str, affiliation: str = None) -> list[tuple]:
+    url = f"https://serpapi.com/search.json?engine=google_scholar_profiles&mauthors={quote(author)}&api_key={SERPAPI_KEY}"
+    async with session.get(url, headers=random_headers()) as response:
+        if response.status == 200:
+            response = await response.json()
+
+            if affiliation:
+                for profile in response["profiles"]:
+                    if valid_names([profile["name"]], author, 80):
+                        if valid_affil(affiliation, profile["affiliations"]):
+                            author_id = profile["author_id"]
+                            break
+                else:
+                    return []
+            else:
+                profile = response["profiles"][0]
+                if valid_names([profile["name"]], author, 80):
+                    author_id = profile["author_id"]
+                else:
+                    return []
+
+            results, tasks = [], []
+            url = f"https://serpapi.com/search.json?engine=google_scholar_author&author_id={author_id}&api_key={SERPAPI_KEY}"
+            async with session.get(url, headers=random_headers()) as response:
+                response = await response.json()
+                table = response["cited_by"]["table"]
+                info = response["author"] | {"graph": response["cited_by"]["graph"]} | table[0] | table[1] | table[2]
+
+                articles = response["articles"]
+                for i in articles:
+                    authors = [clean_author(author) for author in i["authors"].split(",")]
+                    title = i["title"]
+                    year = extract_year(i["year"])
+                    link = i["link"]
+                    tasks.append(abstract(session, link, "scholar"))
+                    results.append(("scholar", title, year, authors, link))
+                abstracts = await asyncio.gather(*tasks)
+                results = [to_dict(a, b, c, d, e, f) for (a, b, c, d, e), f in zip(results, abstracts)]
+                return [results, info]
 
 
 async def dblp(session: aiohttp.ClientSession, author: str) -> list[tuple]:
@@ -214,29 +266,18 @@ async def worker(session: aiohttp.ClientSession, url: str, source: str, author: 
                     return to_dict(source, title, extract_year(year), authors, url, clean_abs(abstract))
 
 
-async def main(author, functions: list = None):
+async def main(author, affiliation=None, functions: list = None):
     async with aiohttp.ClientSession() as session:
         if not functions:
             functions = [arxiv, pubmed, inspire, acmdl, biorxiv, nature]
         tasks = [function(session, author) for function in functions]
+        sres = await scholar(session, author, affiliation)
         results = await asyncio.gather(*tasks)
-        # results = [result for result in results if result is not None]
-
-        info, outresults = None, []
-        for result in results:
-            if isinstance(result, list):
-                if result is not None:
-                    outresults.append(result)
-            elif isinstance(result, dict):
-                outresults.append(result.get("results", []))
-                info = result.get("info", None)
-
-        return [list(chain.from_iterable(outresults)), info]
+        results = [result for result in results if result is not None]
+        return {"data": list(chain.from_iterable(results)) + sres[0], "info": sres[1]}
 
 
-async def multimain(authors: list[str]):
-    tasks = [main(author) for author in authors]
+async def multimain(authors: list[str], affiliation=None):
+    tasks = [main(author, affiliation) for author in authors]
     results = await asyncio.gather(*tasks)
-    # results_dict = {author: result for author, result in zip(authors, results)}
-    results_dict = {author: {"data": result[0], "info": result[1]} for author, result in zip(authors, results)}
-    return results_dict
+    return {author: result for author, result in zip(authors, results)}
