@@ -1,5 +1,5 @@
 runtime: python311
-entrypoint: gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker
+entrypoint: gunicorn main:app -w 1 -k uvicorn.workers.UvicornWorker
 
 handlers:
 - url: /static
