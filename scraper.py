@@ -1,4 +1,5 @@
 import asyncio
+import os
 import time
 from itertools import chain
 from urllib.parse import quote
@@ -6,6 +7,7 @@ from urllib.parse import quote
 import aiohttp
 import feedparser
 from bs4 import BeautifulSoup
+from dotenv import load_dotenv
 
 from utils import (
     abstract,
@@ -17,6 +19,9 @@ from utils import (
     valid_affil,
     valid_names,
 )
+
+load_dotenv()
+SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 
 
 async def linker(session: aiohttp.ClientSession, author: str) -> list[tuple]:
@@ -95,7 +100,7 @@ async def dblp(session: aiohttp.ClientSession, author: str) -> list[tuple]:
                         tasks = [abstract(session, link) for link in links]
                         abstracts = await asyncio.gather(*tasks)
                         results = list(zip(source, titles, years, authors, links, abstracts))
-                        return [to_dict(i) for i in results]
+                        return [to_dict(*i) for i in results if i]
         return []
 
 
@@ -242,7 +247,10 @@ async def worker(session: aiohttp.ClientSession, url: str, source: str, author: 
                     title = metadata["titles"][0]["title"]
                     year = metadata.get("publication_info", [{}])[0].get("year") or metadata.get("imprints", [{}])[0].get("date") or metadata.get("preprint_date")
                     link = url.replace("/api", "").replace("?format=json", "")
-                    abstract = metadata["abstracts"][0]["value"]
+                    try:
+                        abstract = metadata["abstracts"][0]["value"]
+                    except:
+                        abstract = None
                     return to_dict(source, title, extract_year(year), authors, link, clean_abs(abstract))
 
             elif source == "biorxiv":
@@ -252,7 +260,7 @@ async def worker(session: aiohttp.ClientSession, url: str, source: str, author: 
                 if valid_names(authors, author):
                     title = soup.find("h1", {"class": "highwire-cite-title"}).text.strip()
                     year = soup.find("div", {"class": "panel-pane pane-custom pane-1"}).text
-                    abstract = soup.find("div", {"class": "highwire-markup"}).text.strip()
+                    abstract = soup.find("div", {"class": "highwire-markup"})
                     return to_dict(source, title, extract_year(year), authors, url, clean_abs(abstract))
 
             elif source == "nature":
@@ -262,14 +270,14 @@ async def worker(session: aiohttp.ClientSession, url: str, source: str, author: 
                 if valid_names(authors, author):
                     year = soup.find("time").text
                     title = soup.find("h1", {"class": "c-article-title"}).text.strip()
-                    abstract = soup.find("div", {"id": "Abs1-content", "class": "c-article-section__content"}).text.strip()
+                    abstract = soup.find("div", {"id": "Abs1-content", "class": "c-article-section__content"})
                     return to_dict(source, title, extract_year(year), authors, url, clean_abs(abstract))
 
 
 async def main(author, affiliation=None, functions: list = None):
     async with aiohttp.ClientSession() as session:
         if not functions:
-            functions = [arxiv, pubmed, inspire, acmdl, biorxiv, nature]
+            functions = [arxiv, pubmed, acmdl, biorxiv, nature]
         tasks = [function(session, author) for function in functions]
         sres = await scholar(session, author, affiliation)
         results = await asyncio.gather(*tasks)

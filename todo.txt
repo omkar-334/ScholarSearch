@@ -10,6 +10,13 @@ TODO
 7. Rate Limiting - DONE (1 call / 10sec)
 8. TooManyRedirects Error and captcha with dblp, scholar
 9. DBLP and Scholar slowing down the script (~10sec overhead)
+10. add research assistant chatbot
+11.  implement database caching
+12.  summary generator 
+13.  add customized queries using AND / OR (multiple statements)
+14.  Integrate citation metrics and graphs
+15.  try to scrape topics/tags
+16.  create endpoint author and store all author data in db
 
 Current Databases
 

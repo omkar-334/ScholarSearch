@@ -93,6 +93,10 @@ def valid_affil(query, result):
 
 
 def clean_abs(abstract: str):
+    if isinstance(abstract, Tag):
+        abstract = abstract.text
+    if not abstract:
+        return None
     abstract = abstract.strip().replace("\n", "").replace("\t", "").replace("\xa0", " ")
     if abstract[:8].lower() == "abstract":
         abstract = abstract[8:]
@@ -121,7 +125,7 @@ source_map = {
     "www.biorxiv.org": "biorxiv",
     "www.mdpi.com": "mdpi",
     "www.frontiersin.org": "frontiers",
-    "doi.org": "doi",
+    # "doi.org": "doi",
     # -----
     # Access blocked - JS needed
     # -----
@@ -197,13 +201,10 @@ async def abstract(session: aiohttp.ClientSession, url: str, source: str = None)
         abstract = None
 
         if response.status == 200:
-            # DOI reroutes websites, so checking URL of response is necessary.
+            # DOI redirects websites, so checking URL of response is necessary.
             if source == "doi":
                 url = str(response.url)
-                print(url)
                 if not (source := extract_source(url)):
-                    response = await response.json()
-                    print(response)
                     return None
 
             elif source == "scholar":
@@ -282,7 +283,4 @@ async def abstract(session: aiohttp.ClientSession, url: str, source: str = None)
                     notes.decompose()
 
             if abstract:
-                if isinstance(abstract, Tag):
-                    abstract = abstract.text
-                abstract = clean_abs(abstract)
-                return abstract
+                return clean_abs(abstract)
