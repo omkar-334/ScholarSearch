@@ -54,7 +54,7 @@ Ensure the following tools are installed:
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/omkar-334/ScholarSearch.git
-   cd mindscape
+   cd ScholarSearch
    ```
 
 2. **Install dependencies**:
