@@ -51,18 +51,16 @@ def generate_variants(author: str) -> set[str]:
             variants.add(f"{first} {last[0]}")
     elif len(splitname) == 3:
         first, middle, last = splitname
-        variants.update(
-            {
-                f"{first[0]} {middle} {last}",
-                f"{first} {middle[0]} {last}",
-                f"{first} {middle} {last[0]}",
-                f"{first[0]} {middle[0]} {last[0]}",
-                f"{middle[0]} {first[0]} {last[0]}",
-                # f"{first} {last}",
-                # f"{first[0]} {last}",
-                # f"{first} {last[0]}",
-            }
-        )
+        variants.update({
+            f"{first[0]} {middle} {last}",
+            f"{first} {middle[0]} {last}",
+            f"{first} {middle} {last[0]}",
+            f"{first[0]} {middle[0]} {last[0]}",
+            f"{middle[0]} {first[0]} {last[0]}",
+            # f"{first} {last}",
+            # f"{first[0]} {last}",
+            # f"{first} {last[0]}",
+        })
     return variants
 
 
@@ -70,26 +68,18 @@ def valid_name(variants, name, ratio=None):
     if not ratio:
         ratio = 90
     name = name.replace(".", "").replace(",", "").lower()
-    for i in variants:
-        if fuzz.token_sort_ratio(i, name) >= ratio:
-            return True
-    return False
+    return any(fuzz.token_sort_ratio(i, name) >= ratio for i in variants)
 
 
 def valid_names(names: list[str], author: str, ratio=None):
     variants = generate_variants(author)
-    for name in names:
-        if valid_name(variants, name, ratio):
-            return True
-    return False
+    return any(valid_name(variants, name, ratio) for name in names)
 
 
 def valid_affil(query, result):
     if query in result or result in query:
         return True
-    if fuzz.token_sort_ratio(result, query) >= 80:
-        return True
-    return False
+    return fuzz.token_sort_ratio(result, query) >= 80
 
 
 def clean_abs(abstract: str):
@@ -145,7 +135,7 @@ source_map = {
 def extract_source(url: str):
     match = re.search(r"https*://([^/]+)", url)
     domain = match.group(1)
-    source = source_map.get(domain, None)
+    source = source_map.get(domain)
     return source
 
 
@@ -167,15 +157,13 @@ def extract_years(data):
 
 def validate_query(author: str):
     author = author.strip()
-    if not author or author == "":
+    if not author:
         return False
     if len(author.split()) <= 1:
         return False
     if len(author) > 25:
         return False
-    if not re.match(r"^[A-Za-z\s]+$", author):
-        return False
-    return True
+    return re.match(r"^[A-Za-z\s]+$", author)
 
 
 async def abstract(session: aiohttp.ClientSession, url: str, source: str = None) -> str:
@@ -189,13 +177,12 @@ async def abstract(session: aiohttp.ClientSession, url: str, source: str = None)
     Returns:
         str: Abstract text
     """
-    if not source:
-        if not (source := extract_source(url)):
-            return None
+    if not source and not (source := extract_source(url)):
+        return None
 
-    ### Too many redirects error
+    # Too many redirects error
     if source == "openreview":
-        return
+        return None
 
     async with session.get(url, headers=random_headers()) as response:
         abstract = None
@@ -284,3 +271,4 @@ async def abstract(session: aiohttp.ClientSession, url: str, source: str = None)
 
             if abstract:
                 return clean_abs(abstract)
+    return None

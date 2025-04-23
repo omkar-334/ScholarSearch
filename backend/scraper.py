@@ -8,7 +8,6 @@ import aiohttp
 import feedparser
 from bs4 import BeautifulSoup
 from dotenv import load_dotenv
-
 from utils import (
     abstract,
     clean_abs,
@@ -32,6 +31,7 @@ async def linker(session: aiohttp.ClientSession, author: str) -> list[tuple]:
             articles = response["organic_results"]
             linkmap = {i["title"]: i.get("link", "") for i in articles}
             return linkmap
+    return {}
 
 
 async def scholar(session: aiohttp.ClientSession, author: str, affiliation: str = None) -> list[tuple]:
@@ -73,6 +73,8 @@ async def scholar(session: aiohttp.ClientSession, author: str, affiliation: str 
                 abstracts = await asyncio.gather(*tasks)
                 results = [to_dict(a, b, c, d, e, f) for (a, b, c, d, e), f in zip(results, abstracts)]
                 return [results, info]
+
+    return []
 
 
 async def dblp(session: aiohttp.ClientSession, author: str) -> list[tuple]:
@@ -186,6 +188,7 @@ async def biorxiv(session: aiohttp.ClientSession, author: str) -> list[tuple]:
             links = [baseurl + i.get("href", None) for i in soup.find_all("a", {"class": "highwire-cite-linked-title"})]
             tasks = [worker(session, link, "biorxiv", author) for link in links]
             return await asyncio.gather(*tasks)
+    return None
 
 
 async def nature(session: aiohttp.ClientSession, author: str) -> list[tuple]:
@@ -198,6 +201,7 @@ async def nature(session: aiohttp.ClientSession, author: str) -> list[tuple]:
             links = [baseurl + i.get("href", None) for i in soup.find_all("a", {"class": "c-card__link u-link-inherit"})]
             tasks = [worker(session, link, "nature", author) for link in links]
             return await asyncio.gather(*tasks)
+    return None
 
 
 ### NOTE - IEEE and Scopus need Institute Ethernet for access
@@ -272,6 +276,7 @@ async def worker(session: aiohttp.ClientSession, url: str, source: str, author: 
                     title = soup.find("h1", {"class": "c-article-title"}).text.strip()
                     abstract = soup.find("div", {"id": "Abs1-content", "class": "c-article-section__content"})
                     return to_dict(source, title, extract_year(year), authors, url, clean_abs(abstract))
+    return None
 
 
 async def main(author, affiliation=None, functions: list = None):
@@ -288,4 +293,4 @@ async def main(author, affiliation=None, functions: list = None):
 async def multimain(authors: list[str], affiliation=None):
     tasks = [main(author, affiliation) for author in authors]
     results = await asyncio.gather(*tasks)
-    return {author: result for author, result in zip(authors, results)}
+    return dict(zip(authors, results))

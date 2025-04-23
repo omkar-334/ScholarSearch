@@ -2,7 +2,6 @@ import json
 import os
 import time
 from collections import defaultdict
-from typing import List
 from urllib.parse import unquote
 
 from dotenv import load_dotenv
@@ -14,7 +13,7 @@ from groq import AsyncGroq
 
 # from google.cloud import firestore
 # import uvicorn
-from scraper import generate_variants, multimain, validate_query
+from scraper import multimain, validate_query
 
 load_dotenv()
 
@@ -109,7 +108,7 @@ def wait_till_request(ip: str):
 
 
 @app.get("/query")
-async def query(request: Request, background_tasks: BackgroundTasks, author: List[str] = Query(...), api_key: str = Query(...)):
+async def query(request: Request, background_tasks: BackgroundTasks, author: list[str] = Query(...), api_key: str = Query(...)):
     if api_key != API_KEY:
         raise HTTPException(status_code=403, detail="Invalid API key")
 
@@ -138,7 +137,7 @@ async def query(request: Request, background_tasks: BackgroundTasks, author: Lis
 
 
 @app.get("/dummy")
-async def dummy(request: Request, background_tasks: BackgroundTasks, author: List[str] = Query(...), api_key: str = Query(...)):
+async def dummy(request: Request, background_tasks: BackgroundTasks, author: list[str] = Query(...), api_key: str = Query(...)):
     with open("dummy.json", "r") as file:
         data = json.load(file)  # Load the JSON content
         return data
@@ -180,7 +179,7 @@ async def handler(request: Request, exc: RequestValidationError):
                 status_code=400,
                 content={"detail": "API key parameter is required."},
             )
-        elif "author" in loc:
+        if "author" in loc:
             return JSONResponse(
                 status_code=400,
                 content={"detail": "Atleast one author parameter is required."},
